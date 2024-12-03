@@ -381,7 +381,9 @@ export function generateTrigger(
       React.useState<VoidFunction>(null);
 
     // =========================== Align ============================
-    const [mousePos, setMousePos] = React.useState<[x: number, y: number] | null>(null);
+    const [mousePos, setMousePos] = React.useState<
+      [x: number, y: number] | null
+    >(null);
 
     const setMousePosByEvent = (
       event: Pick<React.MouseEvent, 'clientX' | 'clientY'>,
@@ -548,7 +550,7 @@ export function generateTrigger(
     }
 
     // Click to hide is special action since click popup element should not hide
-    useWinClick(
+    const onPopupPointerDown = useWinClick(
       mergedOpen,
       clickToHide,
       targetEle,
@@ -720,6 +722,7 @@ export function generateTrigger(
             fresh={fresh}
             // Click
             onClick={onPopupClick}
+            onPointerDownCapture={onPopupPointerDown}
             // Mask
             mask={mask}
             // Motion
