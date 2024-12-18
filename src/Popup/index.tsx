@@ -132,27 +132,6 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>((props, ref) => {
   const [show, setShow] = React.useState(
     !getPopupContainer || !getPopupContainerNeedParams,
   );
-  const [containerDiv] = React.useState(() => {
-    const absoluteContainer = document.createElement('div');
-    absoluteContainer.style.position = 'absolute';
-    absoluteContainer.style.top = '0';
-    absoluteContainer.style.left = '0';
-    absoluteContainer.style.width = '100%';
-
-    const emptyDiv = document.createElement('div');
-    absoluteContainer.appendChild(emptyDiv);
-
-    return emptyDiv;
-  });
-
-  const _getContainer = () => {
-    const mountNode = getPopupContainer(target);
-    if (containerDiv?.parentElement?.parentElement) { // 已挂载，不再重复插入
-      return containerDiv;
-    }
-    mountNode?.appendChild(containerDiv?.parentElement || containerDiv);
-    return containerDiv;
-  };
 
   // Delay to show since `getPopupContainer` need target element
   useLayoutEffect(() => {
@@ -223,7 +202,7 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>((props, ref) => {
   return (
     <Portal
       open={forceRender || isNodeVisible}
-      getContainer={getPopupContainer && _getContainer}
+      getContainer={getPopupContainer && (() => getPopupContainer(target))}
       autoDestroy={autoDestroy}
     >
       <Mask
@@ -259,6 +238,8 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>((props, ref) => {
                 const cls = classNames(prefixCls, motionClassName, className);
 
                 return (
+                  <div style={{position: 'absolute', top: 0, left: 0, width: '100%'}}>
+                    <div>
                   <div
                     ref={composeRef(resizeObserverRef, ref, motionRef)}
                     className={cls}
@@ -291,6 +272,8 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>((props, ref) => {
                     <PopupContent cache={!open && !fresh}>
                       {childNode}
                     </PopupContent>
+                  </div>
+                    </div>
                   </div>
                 );
               }}
