@@ -132,33 +132,47 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>((props, ref) => {
   const [show, setShow] = React.useState(
     !getPopupContainer || !getPopupContainerNeedParams,
   );
-  const [containerDiv] = React.useState(() => {
-    const absoluteContainer = document.createElement('div');
-    absoluteContainer.style.position = 'absolute';
-    absoluteContainer.style.top = '0';
-    absoluteContainer.style.left = '0';
-    absoluteContainer.style.width = '100%';
+
+  const [absoluteContainer, emptyContainer] = React.useMemo(() => {
+    const absoluteDiv = document.createElement('div');
+    absoluteDiv.style.position = 'absolute';
+    absoluteDiv.style.top = '0';
+    absoluteDiv.style.left = '0';
+    absoluteDiv.style.width = '100%';
 
     const emptyDiv = document.createElement('div');
-    absoluteContainer.appendChild(emptyDiv);
+    absoluteDiv.appendChild(emptyDiv);
 
-    return emptyDiv;
-  });
+    return [absoluteDiv, emptyDiv];
+  }, []);
 
   const _getContainer = () => {
     const mountNode = getPopupContainer(target);
-    if (containerDiv?.parentElement?.parentElement) { // 已挂载，不再重复插入
-      return containerDiv;
+    if (mountNode && absoluteContainer && !absoluteContainer.parentElement && (forceRender || isNodeVisible)) { // 无父元素说明未挂载，显示且未挂载时才挂载
+      mountNode.appendChild(absoluteContainer);
     }
-    mountNode?.appendChild(containerDiv?.parentElement || containerDiv);
-    return containerDiv;
+    return emptyContainer;
   };
+
+  const cleanup = () => {
+    if (absoluteContainer && absoluteContainer.parentElement) {
+      absoluteContainer.parentElement.removeChild(absoluteContainer);
+    }
+  };
+
+  useLayoutEffect(() => {
+    if (!forceRender && !isNodeVisible) {
+      cleanup();
+    }
+    return cleanup;
+  }, [forceRender, isNodeVisible]);
 
   // Delay to show since `getPopupContainer` need target element
   useLayoutEffect(() => {
     if (!show && getPopupContainerNeedParams && target) {
       setShow(true);
     }
+    return cleanup
   }, [show, getPopupContainerNeedParams, target]);
 
   // ========================= Render =========================
