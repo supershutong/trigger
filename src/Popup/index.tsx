@@ -148,14 +148,15 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>((props, ref) => {
 
   const _getContainer = () => {
     const mountNode = getPopupContainer(target);
-    if (mountNode && absoluteContainer && !absoluteContainer.parentElement && (forceRender || isNodeVisible)) { // 无父元素说明未挂载，显示且未挂载时才挂载
+    if (mountNode && absoluteContainer && !absoluteContainer.parentElement) { // 无父元素说明未挂载，未挂载时才挂载
       mountNode.appendChild(absoluteContainer);
     }
     return emptyContainer;
   };
 
   const cleanup = () => {
-    if (absoluteContainer && absoluteContainer.parentElement) {
+    // 仅移除tooltip/popover的挂载点
+    if (['wui-tooltip', 'wui-popover'].includes(prefixCls) && absoluteContainer && absoluteContainer.parentElement) {
       absoluteContainer.parentElement.removeChild(absoluteContainer);
     }
   };
