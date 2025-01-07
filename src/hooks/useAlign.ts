@@ -432,6 +432,7 @@ export default function useAlign(
 
         if (
           // Of course use larger one
+          originIntersectionVisibleArea !== 0 &&
           newVisibleArea > originIntersectionVisibleArea ||
           (newVisibleArea === originIntersectionVisibleArea &&
             (!isVisibleFirst ||
@@ -478,6 +479,7 @@ export default function useAlign(
 
         if (
           // Of course use larger one
+          originIntersectionVisibleArea !== 0 && 
           newVisibleArea > originIntersectionVisibleArea ||
           (newVisibleArea === originIntersectionVisibleArea &&
             (!isVisibleFirst ||
@@ -531,6 +533,7 @@ export default function useAlign(
 
         if (
           // Of course use larger one
+          originIntersectionVisibleArea !== 0 && 
           newVisibleArea > originIntersectionVisibleArea ||
           (newVisibleArea === originIntersectionVisibleArea &&
             (!isVisibleFirst ||
@@ -577,6 +580,7 @@ export default function useAlign(
 
         if (
           // Of course use larger one
+          originIntersectionVisibleArea !== 0 && 
           newVisibleArea > originIntersectionVisibleArea ||
           (newVisibleArea === originIntersectionVisibleArea &&
             (!isVisibleFirst ||
