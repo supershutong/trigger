@@ -133,6 +133,7 @@ export interface TriggerProps {
    * Used for some component is function component which can not access by `findDOMNode`
    */
   getTriggerDOMNode?: (node: React.ReactInstance) => HTMLElement;
+  disableAdjustEdge?: boolean;
 
   // // ========================== Mobile ==========================
   // /** @private Bump fixed position at bottom in mobile.
@@ -210,6 +211,7 @@ export function generateTrigger(
 
       // Private
       getTriggerDOMNode,
+      disableAdjustEdge = false,
 
       ...restProps
     } = props;
@@ -411,6 +413,7 @@ export function generateTrigger(
       builtinPlacements,
       popupAlign,
       onPopupAlign,
+      disableAdjustEdge
     );
 
     const [showActions, hideActions] = useAction(
