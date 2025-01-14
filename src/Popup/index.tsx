@@ -149,6 +149,7 @@ const Popup = React.forwardRef<HTMLDivElement, PopupProps>((props, ref) => {
   const _getContainer = () => {
     const mountNode = getPopupContainer(target);
     if (mountNode && absoluteContainer && !absoluteContainer.parentElement) { // 无父元素说明未挂载，未挂载时才挂载
+      if (!emptyContainer.children?.length) return;
       mountNode.appendChild(absoluteContainer);
     }
     return emptyContainer;
